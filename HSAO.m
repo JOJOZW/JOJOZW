@@ -1,4 +1,4 @@
-% 天鹰算法——镜像单纯形法+
+% 天鹰算法
 function [Leader_score,Leader_pos,Convergence_curve,pc,pn] = HSAO(SearchAgents_no,Max_iter,lb,ub,fobj,dim,alpha,delta,omega,u,r0)
 N = dim/2;
 Fit = zeros(1,SearchAgents_no);% 临时变量
