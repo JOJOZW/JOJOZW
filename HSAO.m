@@ -53,7 +53,7 @@ for iter=1:Max_iter
         G1 = 2*(1-iter/Max_iter);
         G2 = 2*rand-1;
         for i = 1:SearchAgents_no
-            % 将平均扩展为随机步长机制和螺旋交流机制
+            % 将平均扩展为随机机制和螺旋交流机制
             % 螺旋因子
             a2 = -1+iter*((-1)/Max_iter);
             b = 1;               	
@@ -65,7 +65,7 @@ for iter=1:Max_iter
                 r_id = randperm(SearchAgents_no,1);
                 Positions(i,:) =Positions(i,:)+lx*(Leader_pos-Positions(i,:))+rand*(Positions(r_id,:)-Positions(i,:));
             else
-                % 将莱维飞行变为
+                % 
                 Positions(i,:) = QF*Leader_pos-(G2*Positions(i,:)*rand) - G1.*Levy(dim)+rand*G2;% 公式6
             end
             % 越界检查，越界后再解空间随机
@@ -85,13 +85,12 @@ for iter=1:Max_iter
            Leader_pos = Suboptimal_pos; 
         end
     end
-    % ===============镜像单纯形法=================
-    % 反射系数fs,扩张系数kz，收缩系数ss,内收缩系数nss,缩放因子sf
+    % ===============单纯形法和随机反向=================
+    % 反射系数fs,扩张系数kz，收缩系数ss,内收缩系数nss
     fs = 1;
     kz = 2;
     ss = 0.5;
     nss = 0.5;
-    sf = 1;
     for i = 1 : SearchAgents_no 
         x_c = Suboptimal_pos+Leader_pos;
         x_r = x_c+fs*(x_c-Positions(i,:));
@@ -123,7 +122,7 @@ for iter=1:Max_iter
                 Positions(i,:) = x_w;
             end
         end
-        x_j = (ub+lb)/2+(ub+lb)/(2*sf)-Positions(i,:)./sf;
+        x_j = rand*lb+rand*(ub-Positions(i,:));
         x_j = Bounds(x_j, lb, ub,N);
         [Fx_j,~,~] = fobj(x_j); 
         if Fx_j<Leader_score    
